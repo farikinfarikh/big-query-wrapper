@@ -1,0 +1,26 @@
+Query data from BigQuery
+---
+tags:
+  - BigQuery
+consumes:
+  - application/json
+produces:
+  - application/json
+parameters:
+  - name: body
+    description: Post query syntax to get data
+    in: body
+    required: true
+    schema:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: place query syntax here
+          example: "SELECT corpus AS title, COUNT(word) AS unique_words FROM `bigquery-public-data.samples.shakespeare` GROUP BY title ORDER BY unique_words DESC LIMIT 10"
+
+responses:
+  201:
+    description: Retrieved data from Bigquery

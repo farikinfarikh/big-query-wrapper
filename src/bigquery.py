@@ -1,14 +1,17 @@
 from flask import Blueprint, request, jsonify
 from google.cloud import bigquery
 from google.api_core.exceptions import BadRequest
-
 from src.constants.http_status_codes import HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-
+from flasgger import swag_from
 
 bq = Blueprint("bq",__name__,url_prefix="/api/")
 
 @bq.post('query')
-def query():
+@swag_from('./docs/bigquery/bigquery.yaml')
+def query():    
+    if 'query' not in request.json:
+        return jsonify({'error message': 'query is required'}), \
+            HTTP_400_BAD_REQUEST
     query = request.json['query']
     client = bigquery.Client()
     try:
